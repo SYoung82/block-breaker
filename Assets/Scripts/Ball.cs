@@ -32,7 +32,13 @@ public class Ball : MonoBehaviour {
 	}
 
 	void OnCollisionExit2D(Collision2D collision) {
-		bool breakableBrickCollision = collision.gameObject.name.Contains("Hit"); 
+		Vector2 tweak = new Vector2(Random.Range(0f, 0.2f), Random.Range(0f, 0.2f));
+		bool breakableBrickCollision = collision.gameObject.name.Contains("Hit");
+
+		if(hasStarted) {
+			GetComponent<Rigidbody2D>().velocity += tweak;
+		}
+
 		if(hasStarted && !breakableBrickCollision) {
 			boing.Play();
 		}
