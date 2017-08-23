@@ -5,7 +5,6 @@ using UnityEngine;
 public class Brick : MonoBehaviour {
 
 	public Sprite[] hitSprites;
-	public int maxHits;
 	private int timesHit;
 	private LevelManager levelManager;
 
@@ -15,7 +14,16 @@ public class Brick : MonoBehaviour {
 	}
 
 	void OnCollisionExit2D() {
+		bool isBreakable = (this.tag == "Breakable");
+		if(isBreakable) {
+			HandleHits();
+		}
+	}
+
+	void HandleHits() {
 		timesHit++;
+		int maxHits = hitSprites.Length + 1;
+
 		if(timesHit >= maxHits) {
 			Destroy(gameObject);
 		}
@@ -25,6 +33,9 @@ public class Brick : MonoBehaviour {
 	}
 
 	void LoadSprites() {
-		this.GetComponent<SpriteRenderer>().sprite = hitSprites[timesHit - 1];
+		int spriteIndex = timesHit - 1;
+		if(hitSprites[spriteIndex]) {
+			this.GetComponent<SpriteRenderer>().sprite = hitSprites[spriteIndex];
+		}
 	}
 }
