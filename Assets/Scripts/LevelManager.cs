@@ -19,4 +19,10 @@ public class LevelManager : MonoBehaviour {
 		Debug.Log("Quit request submitted.");
 		Application.Quit();
 	}
+
+	public void BrickDestroyed() {
+		if(Brick.breakableBrickCount <= 0) {
+			SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+		}
+	}
 }

@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Brick : MonoBehaviour {
-
+	public static int breakableBrickCount = 0;
+	private bool isBreakable;
 	public Sprite[] hitSprites;
 	private int timesHit;
 	private LevelManager levelManager;
@@ -11,10 +12,13 @@ public class Brick : MonoBehaviour {
 	void Start() {
 		timesHit = 0;
 		levelManager = GameObject.FindObjectOfType<LevelManager>();
+		isBreakable = (this.tag == "Breakable");
+		if(isBreakable) {
+			breakableBrickCount++;
+		}
 	}
 
 	void OnCollisionExit2D() {
-		bool isBreakable = (this.tag == "Breakable");
 		if(isBreakable) {
 			HandleHits();
 		}
@@ -25,6 +29,8 @@ public class Brick : MonoBehaviour {
 		int maxHits = hitSprites.Length + 1;
 
 		if(timesHit >= maxHits) {
+			breakableBrickCount--;
+			levelManager.BrickDestroyed();
 			Destroy(gameObject);
 		}
 		else {
