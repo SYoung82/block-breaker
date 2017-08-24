@@ -9,10 +9,11 @@ public class Brick : MonoBehaviour {
 	public Sprite[] hitSprites;
 	private int timesHit;
 	private LevelManager levelManager;
+	public GameObject smoke;
 
 	void Start() {
 		timesHit = 0;
-		levelManager = GameObject.FindObjectOfType<LevelManager>();
+		levelManager = GameObject.FindObjectOfType<LevelManager>();;
 		isBreakable = (this.tag == "Breakable");
 		if(isBreakable) {
 			breakableBrickCount++;
@@ -32,6 +33,10 @@ public class Brick : MonoBehaviour {
 
 		if(timesHit >= maxHits) {
 			breakableBrickCount--;
+			Vector3 brickPos = new Vector3(this.transform.position.x + 0.5f, this.transform.position.y, this.transform.position.z);
+			GameObject smokePuff = Instantiate(smoke, brickPos, Quaternion.identity);
+			ParticleSystem.MainModule smokePuffMain = smokePuff.GetComponent<ParticleSystem>().main;
+			smokePuffMain.startColor = this.GetComponent<SpriteRenderer>().color;
 			levelManager.BrickDestroyed();
 			Destroy(gameObject);
 		}
